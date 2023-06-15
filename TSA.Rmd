@@ -1,7 +1,7 @@
 ---
 title: "Economic Time Series Analysis"
 author: "David Alexander Moe"
-date: "2023-06-15"
+date: "2023"
 output: github_document
 ---
 

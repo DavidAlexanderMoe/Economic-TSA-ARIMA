@@ -1,7 +1,7 @@
 # Economic Time Series Analysis using ARIMA
-- #### TSA.md file for the analysis
-- #### Report Eco-TSA.pdf for the report
-- #### TSA_raw.R for the raw R code
+- #### Analysis: TSA.md
+- #### Report: Report Eco-TSA.pdf
+- #### Raw R code: TSA_raw.R
 - #### Functions folder contains all the "unkown" functions used in the analysis 
 
 ---

@@ -1,7 +1,7 @@
 Economic Time Series Analysis
 ================
 David Alexander Moe
-2023-06-15
+2023
 
 The analysis concerns the industrial production index (base 2015 = 100),
 which measures the change over time in the physical volume (output) of

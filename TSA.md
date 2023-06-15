@@ -9,7 +9,7 @@ production carried out by industry. The monthly value is derived from a
 special sample survey conducted among Italian industrial enterprises.
 The time series runs from January 1990 to October 2021 (382
 observations). The data can be found on the ‘Eurostat’ website:
-<https://ec.europa.eu/eurostat/databrowser/view/STS_INPR_M__custom_1879177/default/table?lang=en>.
+<https://ec.europa.eu/eurostat/data/database>.
 
 The objective of this analysis is to forecast the change in the
 industrial production index for the next 12 months (short horizon), from

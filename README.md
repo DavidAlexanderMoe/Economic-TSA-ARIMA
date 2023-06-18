@@ -2,7 +2,7 @@
 - #### Analysis: TSA.md
 - #### Report: Report Eco-TSA.pdf
 - #### Raw R code: TSA_raw.R
-- #### Functions folder contains all the "unkown" functions used in the analysis 
+- #### Functions folder contains all the custom functions used in the analysis.
 
 ---
 

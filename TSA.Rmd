@@ -345,13 +345,13 @@ print(rbind(lag1,lb))
 #### Ts plot, acf of residuals^2
 main <- "Residuals^2"
 x1 <- res1^2
-plot(x1, type = "l", main = main, ylab = "")
+plot(x1, type = "l", main = main, ylab = "residuals^2")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
 
 #### Ts plot, acf of |residuals|
 main <- "|Residuals|"
 x1 <- abs(res1)
-plot(x1, type = "l", main = main, ylab = "")
+plot(x1, type = "l", main = main, ylab = "|residuals|")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
 
 ```

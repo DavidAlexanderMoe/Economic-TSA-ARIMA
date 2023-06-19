@@ -315,12 +315,20 @@ root <- .arma.roots(fit = fit1)
 .circle(win = 2)
 points(root$root$ar, col = "red")
 points(root$root$ma, col = "blue")
+legend("bottomright", inset= 0, title="ARIMA", 
+       legend=c("AR roots", "MA roots"),
+       col=c("red", "blue"), pch=1, cex=.70)
 
 #fit2
 root <- .arma.roots(fit = fit2)
 .circle(win = 2)
 points(root$root$ar, col = "red")
 points(root$root$ma, col = "blue")
+legend("bottomright", inset= 0, title="ARIMA + Cal", 
+       legend=c("AR roots", "MA roots"),
+       col=c("red", "blue"), pch=1, cex=.70)
+
+mtext("Root Analysis Comparison", side = 3, line = -1.5, outer = TRUE)
 ```
 
 ![](TSA_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
@@ -515,6 +523,8 @@ points(root$root$ma, col = "blue")
 legend("bottomright", inset= 0, title="ARIMA + Calendar + Outliers", 
        legend=c("AR roots", "MA roots"),
        col=c("red", "blue"), pch=1, cex=.70)
+
+mtext("Root Analysis Comparison", side = 3, line = -1.5, outer = TRUE)
 ```
 
 ![](TSA_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
@@ -525,7 +535,7 @@ last graph shows the roots of the AR and MA characteristic equations. In
 the first model, they are very close to each other: reshaping the ARMA
 orders solves this problem.
 
-\##Diagnostics
+## Diagnostics
 
 ``` r
 fit <- fit4
@@ -540,7 +550,7 @@ resst1 <- ( res1 - mean(res1) ) / sqrt(fit$sigma2)  ## Standardized residuals
 par(mfrow = c(2,1), cex.main=1.15)
 main <- "Residuals"
 x1 <- res1
-plot(x1, type = "l", main = main, ylab = "Residui")
+plot(x1, type = "l", main = main, ylab = "Residuals")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
 ```
 
@@ -577,8 +587,7 @@ print(rbind(lag1,lb))
 
 
 #### Ts plot, acf of residuals^2
-par(mfrow = c(2,1))
-main <- "Residui^2"
+main <- "Residuals^2"
 x1 <- res1^2
 plot(x1, type = "l", main = main, ylab = "")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
@@ -588,8 +597,7 @@ Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main
 
 ``` r
 #### Ts plot, acf of |residuals|
-par(mfrow = c(2,1), cex.main=1.15)
-main <- "|Residui|"
+main <- "|Residuals|"
 x1 <- abs(res1)
 plot(x1, type = "l", main = main, ylab = "")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
@@ -696,13 +704,8 @@ p-value = 3.464e-05).
 ``` r
 #### Settings
 J  <- 12                                              ## How many ex-post forecast to compute
-## quelle per calcolare le misure di errore
 H  <- 1                                               ## Forecasting horizon
-## H=1 ? obbligatorio
-#avendo 252 oss, nelle ex-ante parto a fare previsioni da 240 (H=12 -> 252-12=240)
-#adesso da 239 (252-12-H=239) pero +1 =240
 t1 <- .predict.t1(nobs = NROW(y), J = J, n.ahead = H) ## 1st obs in the ex-post period (needed below)
-## calcolo su T oss, l'ultima oss che mi sta dentro It -> Y(T-j)
 
 
 #### No external regressors

@@ -5,8 +5,7 @@ date: "2023"
 output: github_document
 ---
 
-The analysis concerns the industrial production index (base 2015 = 100), which measures the change over time in the physical volume (output) of production carried out by industry. The monthly value is derived from a special sample survey conducted among Italian industrial enterprises. The time series runs from January 1990 to October 2021 (382 observations). The data can be found on the 'Eurostat' website:
-https://ec.europa.eu/eurostat/data/database.
+The analysis concerns the industrial production index (base 2015 = 100), which measures the change over time in the physical volume (output) of production carried out by industry. The monthly value is derived from a special sample survey conducted among Italian industrial enterprises. The time series runs from January 1990 to October 2021 (382 observations). The data can be found on the 'Eurostat' website: <https://ec.europa.eu/eurostat/data/database>.
 
 The objective of this analysis is to forecast the change in the industrial production index for the next 12 months (short horizon), from November 2021 to October 2022.
 
@@ -16,8 +15,10 @@ For obvious reasons, many things were omitted leaving only the relevant parts.
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Importing necessary dependencies 
+## Importing necessary dependencies
+
 Importing libraries and functions that will be useful throughout the analysis
+
 ```{r}
 rm(list = ls())
 
@@ -30,14 +31,15 @@ library(FinTS)
 ```
 
 Look at the "Functions" folder to see all the specific details about the functions.
+
 ```{r}
 source("G:/Il mio Drive/TRIENNALE/TS Analysis/Economic-TSA-ARIMA/Functions/TSA-Useful-Functions.R")
 source("G:/Il mio Drive/TRIENNALE/TS Analysis/Economic-TSA-ARIMA/Functions/CalendarEffects-Functions.R")
 source("G:/Il mio Drive/TRIENNALE/TS Analysis/Economic-TSA-ARIMA/Functions/TSA-Predict-Functions.R")
 ```
 
-
 ## Read data and declare some external variables
+
 ```{r}
 filedati <- "G:\\Il mio Drive\\TRIENNALE\\TS Analysis\\Economic-TSA-ARIMA\\Production in industry - monthly data (Italy).csv"
 
@@ -86,8 +88,7 @@ Acf(x = x, type = "correlation", na.action = na.pass, lag.max = 60, main = name)
 Acf(x = x, type = "partial",     na.action = na.pass, lag.max = 60, main = name)
 ```
 
-Given the monthly seasonality, a seasonal ARIMA model (p, d, q)x(P, D, Q)[S] with period S=12 is used for the analysis. These graphs show the ACF and PACF respectively, i.e. the autocorrelation and partial autocorrelation at different lags which are indicated in years. The ACF graph confirms the presence of seasonality, given the decay of ACF at multiple lags of S, while the PACF graph denotes that $\psi(12)$ is close to 1: it would appear that the stochastic process is non-stationary due to the seasonal part (D>0).
-To be sure of this non-stationarity, the Augmented Dickey-Fuller (ADF) test is performed.
+Given the monthly seasonality, a seasonal ARIMA model (p, d, q)x(P, D, Q)[S] with period S=12 is used for the analysis. These graphs show the ACF and PACF respectively, i.e. the autocorrelation and partial autocorrelation at different lags which are indicated in years. The ACF graph confirms the presence of seasonality, given the decay of ACF at multiple lags of S, while the PACF graph denotes that $\psi(12)$ is close to 1: it would appear that the stochastic process is non-stationary due to the seasonal part (D\>0). To be sure of this non-stationarity, the Augmented Dickey-Fuller (ADF) test is performed.
 
 ```{r}
 #### UNIT ROOT TESTS:
@@ -118,8 +119,7 @@ print( adf.2@teststat )
 print( adf.2@cval )
 ```
 
-Accepting all tested H0s, $$H0(1): \gamma=0, H0(2): \xi=\gamma=0, H0(3): \omega=\xi=\gamma=0, H0(5): \gamma=0 , H0(6): \omega=\gamma=0$$ 
-(the last 2 H0s obtained by switching to DGP=RW and $\xi=0$ in the model) we conclude that at least one unit root is definitely present. From the data, it appears that the unit root found is due to the seasonal part.
+Accepting all tested H0s, $$H0(1): \gamma=0, H0(2): \xi=\gamma=0, H0(3): \omega=\xi=\gamma=0, H0(5): \gamma=0 , H0(6): \omega=\gamma=0$$ (the last 2 H0s obtained by switching to DGP=RW and $\xi=0$ in the model) we conclude that at least one unit root is definitely present. From the data, it appears that the unit root found is due to the seasonal part.
 
 Therefore, a new ADF test on twelfths differences is carried out to identify other possible URs:
 
@@ -170,12 +170,21 @@ root <- .arma.roots(fit = fit1)
 .circle(win = 2)
 points(root$root$ar, col = "red")
 points(root$root$ma, col = "blue")
+legend("bottomright", inset= 0, title="ARIMA", 
+       legend=c("AR roots", "MA roots"),
+       col=c("red", "blue"), pch=1, cex=.70)
 
 #fit2
 root <- .arma.roots(fit = fit2)
 .circle(win = 2)
 points(root$root$ar, col = "red")
 points(root$root$ma, col = "blue")
+legend("bottomright", inset= 0, title="ARIMA + Cal", 
+       legend=c("AR roots", "MA roots"),
+       col=c("red", "blue"), pch=1, cex=.70)
+
+mtext("Root Analysis Comparison", side = 3, line = -1.5, outer = TRUE)
+
 
 ### fit1 shows MA roots (stemming from the seasonal part) critically close to 1
 ### in module.
@@ -183,7 +192,6 @@ points(root$root$ma, col = "blue")
 ### some ar roots very close to those ma -> lower Q from 2 to 1 in the model+cal and try again
 ### much better results by clearly having more separated roots
 ```
-
 
 Using the powerful tso() function in the models specified so far yields the anomalies. In these chunks of code is presented a portion of the ARIMA modeling with some external regressors.
 
@@ -232,7 +240,6 @@ fit <- Arima(y = y,
 fit3 <- fit
 
 ```
-
 
 ```{r}
 #####################################
@@ -300,12 +307,14 @@ points(root$root$ma, col = "blue")
 legend("bottomright", inset= 0, title="ARIMA + Calendar + Outliers", 
        legend=c("AR roots", "MA roots"),
        col=c("red", "blue"), pch=1, cex=.70)
-```
 
+mtext("Root Analysis Comparison", side = 3, line = -1.5, outer = TRUE)
+
+```
 
 As expected, the model that best fits the data is the last one, which has the same anomalies as the model without calendar variables. This last graph shows the roots of the AR and MA characteristic equations. In the first model, they are very close to each other: reshaping the ARMA orders solves this problem.
 
-##Diagnostics
+## Diagnostics
 
 ```{r}
 fit <- fit4
@@ -320,7 +329,7 @@ resst1 <- ( res1 - mean(res1) ) / sqrt(fit$sigma2)  ## Standardized residuals
 par(mfrow = c(2,1), cex.main=1.15)
 main <- "Residuals"
 x1 <- res1
-plot(x1, type = "l", main = main, ylab = "Residui")
+plot(x1, type = "l", main = main, ylab = "Residuals")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
 
 
@@ -334,24 +343,22 @@ print(rbind(lag1,lb))
 
 
 #### Ts plot, acf of residuals^2
-par(mfrow = c(2,1))
-main <- "Residui^2"
+main <- "Residuals^2"
 x1 <- res1^2
 plot(x1, type = "l", main = main, ylab = "")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
 
 #### Ts plot, acf of |residuals|
-par(mfrow = c(2,1), cex.main=1.15)
-main <- "|Residui|"
+main <- "|Residuals|"
 x1 <- abs(res1)
 plot(x1, type = "l", main = main, ylab = "")
 Acf(x = x1, type = "correlation", lag.max = 60, na.action = na.pass, main = main)
 
 ```
 
-These Graphs show the plot and ACF of the model residuals integrated with calendar variables and anomalies. They show that they have a behaviour compatible with a white noise. The ACF of the squared residuals and |residuals|, leads to the assumption that they are generated by independent random variables. The autocorrelations almost all fall within the bands. 
+These Graphs show the plot and ACF of the model residuals integrated with calendar variables and anomalies. They show that they have a behaviour compatible with a white noise. The ACF of the squared residuals and \|residuals\|, leads to the assumption that they are generated by independent random variables. The autocorrelations almost all fall within the bands.
 
-Let's check the ARCH test on|residuals|:
+Let's check the ARCH test on\|residuals\|:
 
 ```{r}
 #### Another diagnostic: the ARCH test
@@ -364,8 +371,7 @@ at <- mapply(FUN = ArchTest, lags = lag,
 print(at[1:3,])
 ```
 
-
-Rejecting the null hypothesis at almost all M chosen past values leads to the conclusion that the conditional variance is not entirely stable, indicating that perhaps a transformation of the data is necessary to stabilise it. 
+Rejecting the null hypothesis at almost all M chosen past values leads to the conclusion that the conditional variance is not entirely stable, indicating that perhaps a transformation of the data is necessary to stabilise it.
 
 Here, the transformation test which suggests not transforming the data:
 
@@ -391,7 +397,6 @@ print( shapiro.test(x = res1 ) )
 
 Here the unconditional distribution of the standardised residuals: it denotes a certain leptokurticity and thus the Gaussian distribution does not fit the data well. Indeed, in the Shapiro-Wilk normality test, the null hypothesis of normality of the residuals is rejected (W = 0.97978, p-value = 3.464e-05).
 
-
 ## Forecast
 
 ### Ex-post forecasts: all made 1-step ahead
@@ -399,13 +404,8 @@ Here the unconditional distribution of the standardised residuals: it denotes a 
 ```{r}
 #### Settings
 J  <- 12                                              ## How many ex-post forecast to compute
-## quelle per calcolare le misure di errore
 H  <- 1                                               ## Forecasting horizon
-## H=1 ? obbligatorio
-#avendo 252 oss, nelle ex-ante parto a fare previsioni da 240 (H=12 -> 252-12=240)
-#adesso da 239 (252-12-H=239) pero +1 =240
 t1 <- .predict.t1(nobs = NROW(y), J = J, n.ahead = H) ## 1st obs in the ex-post period (needed below)
-## calcolo su T oss, l'ultima oss che mi sta dentro It -> Y(T-j)
 
 
 #### No external regressors
@@ -452,8 +452,7 @@ ErrorMeas <- data.frame(
 print( ErrorMeas )
 ```
 
-
-The naive in the table is a benchmark model that we take as a reference for comparisons: in the case of the data considered, the naive behaves like a seasonal RW because the process has seasonal integration. The model that has the greatest gain in forecasting is ARIMA with calendar effects and outliers because, when comparing all specified models with naive, it has the lowest scaled measurement errors. 
+The naive in the table is a benchmark model that we take as a reference for comparisons: in the case of the data considered, the naive behaves like a seasonal RW because the process has seasonal integration. The model that has the greatest gain in forecasting is ARIMA with calendar effects and outliers because, when comparing all specified models with naive, it has the lowest scaled measurement errors.
 
 This next Graph shows the ex-post forecasts. It turns out that the integrated model with calendar variables and outliers is the best because the true observations are all within the prediction bands of this model.
 
@@ -479,7 +478,6 @@ legend("bottomleft", inset=0, title="Arima: ",
        legend=c("Simple","+ cal", "+ anomalies", "+ cal + outliers", "naive"), 
        col=c("red","cyan", "violet", "blue" ,"green"), lty=1, cex=0.75)
 ```
-
 
 ### Ex-ante forecasts
 

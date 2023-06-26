@@ -1,8 +1,11 @@
 # Economic Time Series Analysis using ARIMA
-- #### Analysis: TSA.md
-- #### Report: Report Eco-TSA.pdf
-- #### Raw R code: TSA_raw.R
-- #### Functions folder contains all the custom functions used in the analysis.
+
+| Purpose | File |
+| --------------- | --------------- |
+| Analysis | TSA.md |
+| Report | Report Eco-TSA.pdf |
+| Raw R code | TSA_raw.R |
+| Custom functions | Functions folder |
 
 ---
 

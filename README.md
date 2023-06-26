@@ -1,11 +1,15 @@
+<div align="center">
+  
 # Economic Time Series Analysis using ARIMA
-
+ 
 | Purpose | File |
 | --------------- | --------------- |
 | Analysis | TSA.md |
 | Report | Report Eco-TSA.pdf |
 | Raw R code | TSA_raw.R |
 | Custom functions | Functions folder |
+
+</div>
 
 ---
 

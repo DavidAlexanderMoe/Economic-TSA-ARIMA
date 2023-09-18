@@ -15,9 +15,6 @@ The objective of this analysis is to forecast the change in the
 industrial production index for the next 12 months (short horizon), from
 November 2021 to October 2022.
 
-For obvious reasons, many things were omitted leaving only the relevant
-parts.
-
 ## Importing necessary dependencies
 
 Importing libraries and functions that will be useful throughout the
